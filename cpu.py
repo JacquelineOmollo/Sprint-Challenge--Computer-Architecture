@@ -85,11 +85,21 @@ class CPU:
         elif op == "AND":
             self.reg[reg_a] = self.reg[reg_a] & self.reg[reg_b]
 
-        elif op == "CMP":
-            if reg_a == reg_b:
-                self.flag[E] = HLT
-            else:
-                self.flag[E] = False
+       elif op == "CMP": #Added CMP for sprint 
+            if self.reg[reg_a] == self.reg[reg_b]: 
+                #flags equal to 
+                self.flag[5] = 0
+                self.flag[6] = 0
+                self.flag[7] = 1
+            elif self.reg[reg_a] < self.reg[reg_b]: 
+                # flags equal too 
+                self.flag[5] = 1 
+                self.flag[6] = 0
+                self.flag[7] = 0
+            elif self.reg[reg_a] > self.reg[reg_b]: 
+                #flags equal too
+                self.flag[5] = 0
+                self.flag[6] = 1
         else:
             raise Exception("Unsupported ALU operation")
 
