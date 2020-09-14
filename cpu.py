@@ -178,11 +178,11 @@ class CPU:
         self.alu("CMP", operand_a, operand_b)
         
     def MUL(self, operand_a, operand_b):
-            self.alu("MUL", operand_a, operand_b)
+        self.alu("MUL", operand_a, operand_b)
 
     def ADD(self, operand_a, operand_b):
-            self.alu("ADD", operand_a, operand_b)
+        self.alu("ADD", operand_a, operand_b)
 
     def SUB(self, operand_a, operand_b):
-            self.alu("SUB",operand_a, operand_b)
+        self.alu("SUB",operand_a, operand_b)
 
