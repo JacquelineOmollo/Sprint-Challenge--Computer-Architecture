@@ -9,7 +9,7 @@ SUB = 0b10100001  # Subtraact
 POP = 0b01000110  # Pop off stack
 PUSH = 0b01000101 # push to stack
 CMP = 0b10100111 # handled by the ALU
-JMP = 0b01010101 # Jump
+JMP = 0b01010100 # Jump
 JEQ = 0b01010101 
 JNE = 0b01010110
 RET = 0b00010001 # Return from subroutine
@@ -42,6 +42,7 @@ class CPU:
         self.branch_table[JEQ] = self.JEQ
         self.branch_table[JNE] = self.JNE
         self.branch_table[RET] = self.RET
+        self.branch_table[JMP] = self.JMP
         
         
     def ram_read(self, address):
@@ -85,21 +86,22 @@ class CPU:
         elif op == "AND":
             self.reg[reg_a] = self.reg[reg_a] & self.reg[reg_b]
 
-       elif op == "CMP": #Added CMP for sprint 
+        elif op == "CMP":  
             if self.reg[reg_a] == self.reg[reg_b]: 
-                #flags equal to 
+                #flags equal 
                 self.flag[5] = 0
                 self.flag[6] = 0
                 self.flag[7] = 1
             elif self.reg[reg_a] < self.reg[reg_b]: 
-                # flags equal too 
+                # flags less 
                 self.flag[5] = 1 
                 self.flag[6] = 0
                 self.flag[7] = 0
             elif self.reg[reg_a] > self.reg[reg_b]: 
-                #flags equal too
+                #flags greater 
                 self.flag[5] = 0
                 self.flag[6] = 1
+
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -117,19 +119,19 @@ class CPU:
         print()
         
     def run(self):
-        while self.running:
+         while self.running:
             #Reads memory for reg and stores results in IR
             IR = self.ram_read(self.pc)
             #Reads bytes with pc+1
-            flag = (IR & 0b00010000) >> 4
             operand_a = self.ram_read(self.pc + 1)
              #Reads bytes with pc+2
             operand_b = self.ram_read(self.pc + 2)
+            flag = (IR & 0b00010000) >> 4
             self.branch_table[IR](operand_a, operand_b)
             if flag == 0:
                 self.pc += 1 + (IR >> 6)
-                
 
+                
     def LDI(self, operand_a, operand_b):
             self.reg[operand_a] = operand_b
                
@@ -183,9 +185,7 @@ class CPU:
         self.pc == subroutine
 
     def CMP(self, operand_a, operand_b):
-        reg1 = self.reg[operand_a]
-        reg2 = self.reg[operand_b]
-        self.alu("CMP", operand_a, operand_b)
+       self.alu("CMP", operand_a, operand_b)
         
     def MUL(self, operand_a, operand_b):
         self.alu("MUL", operand_a, operand_b)
@@ -195,4 +195,5 @@ class CPU:
 
     def SUB(self, operand_a, operand_b):
         self.alu("SUB",operand_a, operand_b)
+
 
